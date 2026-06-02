@@ -7,6 +7,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const toggleDrawer = () => setDrawerOpen(prev => !prev);
   const location = useLocation();
 
   return (
@@ -88,6 +90,7 @@ export default function Layout({ children }: LayoutProps) {
             <WalletConnectButton />
           </div>
         </nav>
+        <MobileDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
       </header>
 
       <main
