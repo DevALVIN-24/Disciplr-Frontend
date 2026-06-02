@@ -22,6 +22,7 @@ import VerifierDashboard from './pages/VerifierDashboard'
 import PendingValidations from './pages/PendingValidations'
 import ValidationDetail from './pages/ValidationDetail'
 import ValidationHistory from './pages/ValidationHistory'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -30,24 +31,24 @@ export default function App() {
         <BrowserRouter>
           {/* Layout handles the global wrapper, header, and sidebar */}
           <Layout>
-            <Suspense fallback={<div style={{ color: 'var(--muted)', padding: '1rem' }}>Loading analytics...</div>}>
-              <Routes>
-                {/* Existing Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/vaults" element={<Vaults />} />
-                <Route path="/vaults/create" element={<CreateVault />} />
-                <Route path="/vaults/:id" element={<VaultDetail />} />
-                <Route path="/vaults/:id/transactions" element={<VaultTransactions />} />
-
-                {/* New Verifier Routes */}
-                <Route path="/verifier" element={<VerifierDashboard />} />
-                <Route path="/verifier/queue" element={<PendingValidations />} />
-                <Route path="/verifier/queue/:vaultId" element={<ValidationDetail />} />
-                <Route path="/verifier/history" element={<ValidationHistory />} />
-              </Routes>
-            </Suspense>
+            <Routes>
+              {/* Existing Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/vaults" element={<Vaults />} />
+              <Route path="/vaults/create" element={<CreateVault />} />
+              <Route path="/vaults/:id" element={<VaultDetail />} />
+              <Route path="/vaults/:id/transactions" element={<VaultTransactions />} />
+              
+              {/* New Verifier Routes */}
+              <Route path="/verifier" element={<VerifierDashboard />} />
+              <Route path="/verifier/queue" element={<PendingValidations />} />
+              <Route path="/verifier/queue/:vaultId" element={<ValidationDetail />} />
+              <Route path="/verifier/history" element={<ValidationHistory />} />
+              
+              {/* Catch-all route for unmatched paths */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </Layout>
         </BrowserRouter>
       </WalletProvider>
