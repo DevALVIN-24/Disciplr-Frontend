@@ -1,12 +1,18 @@
-import { Link, useLocation } from 'react-router-dom'
-import { WalletConnectButton } from './Wallet/WalletConnectButton'
-import { Text } from './Text'
+import { Link, useLocation } from 'react-router-dom';
+import { WalletConnectButton } from './Wallet/WalletConnectButton';
+import { Text } from './Text';
+import { useState } from 'react';
+import { Menu } from 'lucide-react';
+import MobileDrawer from './MobileDrawer';
+import './Layout.css';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const toggleDrawer = () => setDrawerOpen(prev => !prev);
   const location = useLocation();
 
   return (
@@ -16,19 +22,23 @@ export default function Layout({ children }: LayoutProps) {
           <Link to="/" className="header-link" aria-label="Disciplr home">
             <Text role="title" as="span">Disciplr</Text>
           </Link>
-          <Link
-            to="/transactions"
-            className="header-link"
-            style={{ color: location.pathname === '/transactions' ? 'var(--accent)' : 'var(--muted)' }}
-            aria-label="Transactions"
-          >
-            <span className="header-transactions-label">Transactions</span>
-            {/* Icon fallback on very small screens */}
-            <span aria-hidden="true" className="header-transactions-icon" style={{ display: 'none' }}>↗</span>
-          </Link>
+          <NavLink to="/transactions" className="header-link" ariaLabel="Transactions">
+            Transactions
+          </NavLink>
         </div>
 
-        <nav style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        {/* Hamburger button for mobile */}
+        <button
+          className="mobile-hamburger"
+          aria-label="Open navigation drawer"
+          aria-controls="mobile-drawer"
+          aria-expanded={isDrawerOpen}
+          onClick={toggleDrawer}
+        >
+          <Menu size={28} />
+        </button>
+
+        <nav className="desktop-nav" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>    
           <Link
             to="/"
@@ -57,7 +67,7 @@ export default function Layout({ children }: LayoutProps) {
                 borderRadius: '9999px',
                 textDecoration: 'none',
                 fontWeight: 500,
-                fontSize: '0.875rem'
+                fontSize: '0.875rem',
               }}
             >
               Create Vault
@@ -65,18 +75,20 @@ export default function Layout({ children }: LayoutProps) {
             <WalletConnectButton />
           </div>
         </nav>
+        <MobileDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
       </header>
 
-      <main style={{
-        flex: 1,
-        padding: 'var(--spacing-8)',
-        maxWidth: 960,
-        margin: '0 auto',
-        width: '100%',
-      }}>
+      <main
+        style={{
+          flex: 1,
+          padding: 'var(--spacing-8)',
+          maxWidth: 960,
+          margin: '0 auto',
+          width: '100%',
+        }}
+      >
         {children}
       </main>
     </div>
   );
 }
-
