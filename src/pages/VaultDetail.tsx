@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { MilestoneTracker } from "../components/MilestoneTracker";
 import { VaultProgressBar } from "../components/VaultProgressBar";
+import { CountdownDeadline } from "../components/CountdownDeadline";
 import { Text } from "../components/Text";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -249,15 +250,6 @@ function fmtDateTime(iso: string): string {
   });
 }
 
-function timeRemaining(deadline: string): string {
-  const diff = new Date(deadline).getTime() - Date.now();
-  if (diff <= 0) return "Expired";
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  if (days > 0) return `${days}d ${hours}h remaining`;
-  return `${hours}h remaining`;
-}
-
 function timelineProgress(created: string, deadline: string): number {
   const start = new Date(created).getTime();
   const end = new Date(deadline).getTime();
@@ -499,13 +491,7 @@ export default function VaultDetail() {
             Created {fmtDate(vault.createdAt)}
           </Text>
           {isActive ? (
-            <Text
-              role="caption"
-              as="span"
-              style={{ color: "var(--accent)", fontWeight: 600 }}
-            >
-              {timeRemaining(vault.deadline)}
-            </Text>
+            <CountdownDeadline deadline={vault.deadline} />
           ) : (
             <Text
               role="caption"

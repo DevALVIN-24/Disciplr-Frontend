@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Text } from './Text';
 import { VaultProgressBar } from './VaultProgressBar';
 import React from 'react';
+import { CountdownDeadline } from './CountdownDeadline';
 
 export type VaultStatus = 'active' | 'pending_validation' | 'completed' | 'failed';
 
@@ -14,10 +15,6 @@ export interface VaultCardProps {
   deadline: string;
   progressPct: number;
   linkTo?: string;
-}
-
-function daysRemaining(deadline: string): number {
-  return Math.max(0, Math.floor((new Date(deadline).getTime() - Date.now()) / 86400000));
 }
 
 function StatusBadge({ status }: { status: VaultStatus }) {
@@ -59,7 +56,6 @@ export default function VaultCard({
   progressPct,
   linkTo,
 }: VaultCardProps) {
-  const days = daysRemaining(deadline);
   const link = linkTo ?? `/vaults/${id}`;
 
   return (
@@ -85,11 +81,8 @@ export default function VaultCard({
             {amount.toLocaleString()} {currency}
           </Text>
           <Text role="caption" as="div" style={{ color: 'var(--muted)' }}>
-            {`Deadline: ${new Date(deadline).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })} (${days}d left)`}
+            Deadline:{' '}
+            <CountdownDeadline deadline={deadline} />
           </Text>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
