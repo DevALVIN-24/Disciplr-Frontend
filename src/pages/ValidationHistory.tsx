@@ -8,6 +8,7 @@ import {
 } from '../utils/paginate';
 import type { ValidationHistoryStatusFilter } from '../utils/paginate';
 import { downloadCsv, toCsv } from '../utils/csv';
+import { StatusChip } from '../components/StatusChip';
 
 const PAGE_SIZE_OPTIONS = [5, 10, 25];
 
@@ -193,18 +194,7 @@ export default function ValidationHistory() {
               >
                 <div className="flex flex-col gap-2 md:w-1/3">
                   <div className="flex items-center gap-3">
-                    <span
-                      className="px-2 py-1 rounded text-xs font-bold uppercase"
-                      style={{
-                        color: task.status === 'approved' ? 'var(--success)' : 'var(--danger)',
-                        border: `1px solid ${task.status === 'approved' ? 'var(--success)' : 'var(--danger)'}`,
-                        background: task.status === 'approved'
-                          ? 'var(--success-transparent)'
-                          : 'var(--danger-transparent)',
-                      }}
-                    >
-                      {task.status}
-                    </span>
+                    <StatusChip status={task.status as any} className="uppercase" size="sm" />
                     <Text role="body" as="span" className="text-sm" style={{ color: 'var(--muted)' }}>
                       ID: {task.id}
                     </Text>

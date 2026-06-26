@@ -4,6 +4,7 @@ import { CountdownDeadline } from '../components/CountdownDeadline';
 import { ConfirmationModal } from '../components/ConfirmationModal';
 import { Text } from '../components/Text';
 import { useVerifierStore } from '../Zustand/Store';
+import { StatusChip } from '../components/StatusChip';
 
 export default function PendingValidations() {
   const navigate = useNavigate();
@@ -147,7 +148,10 @@ export default function PendingValidations() {
                       />
                     </td>
                     <td className="p-4">
-                      <Text role="body" as="p" className="font-semibold" style={{ color: 'var(--text)' }}>{task.vaultName}</Text>
+                      <div className="flex items-center gap-2">
+                        <Text role="body" as="p" className="font-semibold" style={{ color: 'var(--text)' }}>{task.vaultName}</Text>
+                        <StatusChip status="pending_validation" size="sm" />
+                      </div>
                       <Text role="body" as="p" className="text-sm mt-1" style={{ color: 'var(--muted)' }}>{task.milestone}</Text>
                     </td>
                     <td className="p-4">
