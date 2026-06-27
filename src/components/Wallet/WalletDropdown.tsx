@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useWallet } from '../../context/WalletContext';
 import { Copy, Plus, LogOut, Check, ExternalLink } from 'lucide-react';
 import './wallet.css';
+import { logger } from '../../utils/logger';
 
 interface WalletDropdownProps {
     onClose: () => void;
@@ -24,7 +25,7 @@ export function WalletDropdown({ onClose, onSwitch }: WalletDropdownProps) {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
-            console.error('Failed to copy', err);
+            logger.error('Failed to copy', err);
         }
     };
 
