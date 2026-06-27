@@ -8,6 +8,7 @@ import {
 } from "../utils/vaultValidation";
 import { EvidenceUpload } from "../components/EvidenceUpload";
 import { CreateVaultReview } from "../components/CreateVaultReview";
+import { formatUsdcInput, parseUsdcInput } from "../utils/usdcInput";
 
 export default function CreateVault() {
   const [amount, setAmount] = useState("");
@@ -83,9 +84,10 @@ export default function CreateVault() {
           <Field
             label="Amount (USDC)"
             type="text"
-            value={amount}
+            value={formatUsdcInput(amount)}
             onChange={(e) => {
-              setAmount(e.target.value);
+              const raw = parseUsdcInput(e.target.value);
+              setAmount(raw);
               setErrors((current) => ({ ...current, amount: undefined }));
             }}
             placeholder="1000"

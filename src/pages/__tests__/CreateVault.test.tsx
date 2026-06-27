@@ -111,4 +111,83 @@ describe("CreateVault", () => {
       failureAddress,
     );
   });
+
+  /* ------------------------------------------------------------------ */
+  /*  Amount input mask                                                  */
+  /* ------------------------------------------------------------------ */
+  it("formats amount with thousands grouping while typing", () => {
+    render(<CreateVault />);
+    const input = screen.getByLabelText(/amount/i);
+
+    fireEvent.change(input, { target: { value: "1234" } });
+    expect(input).toHaveValue("1,234");
+
+    fireEvent.change(input, { target: { value: "12345" } });
+    expect(input).toHaveValue("12,345");
+
+    fireEvent.change(input, { target: { value: "1234567" } });
+    expect(input).toHaveValue("1,234,567");
+  });
+
+  it("caps decimal places at 7 while typing", () => {
+    render(<CreateVault />);
+    const input = screen.getByLabelText(/amount/i);
+
+    fireEvent.change(input, { target: { value: "1.123456789" } });
+    expect(input).toHaveValue("1.1234567");
+  });
+
+  it("strips non-numeric paste content", () => {
+    render(<CreateVault />);
+    const input = screen.getByLabelText(/amount/i);
+
+    fireEvent.change(input, { target: { value: "abc1.5def" } });
+    expect(input).toHaveValue("1.5");
+  });
+
+  it("normalises leading zeros", () => {
+    render(<CreateVault />);
+    const input = screen.getByLabelText(/amount/i);
+
+    fireEvent.change(input, { target: { value: "001" } });
+    expect(input).toHaveValue("1");
+  });
+
+  it("handles empty input gracefully", () => {
+    render(<CreateVault />);
+    const input = screen.getByLabelText(/amount/i);
+
+    fireEvent.change(input, { target: { value: "" } });
+    expect(input).toHaveValue("");
+  });
+
+  it("keeps underlying raw value compatible with isValidUsdcAmount", () => {
+    const consoleLog = vi
+      .spyOn(console, "log")
+      .mockImplementation(() => undefined);
+    render(<CreateVault />);
+
+    // Type a number that would get formatted with commas in the display
+    fireEvent.change(screen.getByLabelText(/amount/i), {
+      target: { value: "1234.5678" },
+    });
+    fireEvent.change(screen.getByLabelText(/deadline/i), {
+      target: { value: "2030-01-01T00:00" },
+    });
+    fireEvent.change(screen.getByLabelText(/success destination/i), {
+      target: { value: successAddress },
+    });
+    fireEvent.change(screen.getByLabelText(/failure destination/i), {
+      target: { value: failureAddress },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /create vault/i }));
+    fireEvent.click(screen.getByRole("button", { name: /confirm vault/i }));
+
+    // The raw amount passed to the confirm handler should not have commas
+    // and should be compatible with isValidUsdcAmount
+    expect(consoleLog).toHaveBeenCalledWith(
+      expect.objectContaining({ amount: "1234.5678" }),
+    );
+  });
 });
