@@ -33,9 +33,6 @@ export default function Layout({ children }: LayoutProps) {
           <Link
             to="/transactions"
             className={`header-link${isTransactionsActive ? " active" : ""}`}
-            style={{
-              color: isTransactionsActive ? "var(--accent)" : "var(--muted)",
-            }}
             aria-label="Transactions"
             aria-current={isTransactionsActive ? "page" : undefined}
           >
@@ -54,11 +51,7 @@ export default function Layout({ children }: LayoutProps) {
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <Link
               to="/"
-              className="header-link"
-              style={{
-                color:
-                  location.pathname === "/" ? "var(--accent)" : "var(--muted)",
-              }}
+              className={`header-link${location.pathname === "/" ? " active" : ""}`}
             >
               <Text role="caption" as="span">
                 Home
@@ -67,29 +60,12 @@ export default function Layout({ children }: LayoutProps) {
 
             <Link
               to="/analytics"
-              style={{
-                color:
-                  location.pathname === "/analytics"
-                    ? "var(--accent)"
-                    : "var(--muted)",
-                textDecoration: "none",
-              }}
+              className={`header-link${location.pathname === "/analytics" ? " active" : ""}`}
             >
               Analytics
             </Link>
 
-            <Link
-              to="/vaults/create"
-              style={{
-                color: "var(--surface)",
-                background: "var(--accent)",
-                padding: "0.5rem 1rem",
-                borderRadius: "9999px",
-                textDecoration: "none",
-                fontWeight: 500,
-                fontSize: "0.875rem",
-              }}
-            >
+            <Link to="/vaults/create" className="header-link header-cta">
               Create Vault
             </Link>
             <WalletConnectButton />
