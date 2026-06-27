@@ -14,7 +14,7 @@ A comprehensive design system for the Disciplr financial platform.
 
 See `documentation/getting-started.md` for setup instructions.
 
-For a token-to-component map, see `documentation/token-catalog.md`.
+For a -to-component map, see `documentation/token-catalog.md`.
 
 ## Component Documentation
 
@@ -43,3 +43,6 @@ and `spacing.grid.{mobile|tablet|desktop}`.
 For the full breakpoint table, container max-width audit, vault-column stacking
 guidance, off-token usage catalogue, and example layouts per breakpoint, see
 [`documentation/breakpoints.md`](documentation/breakpoints.md).
+
+```markdown
+* 🎨 **Tokens:** Read our [Token Authoring Guide](./documentation/token-authoring.md) before adding or modifying design tokens.
