@@ -5,6 +5,9 @@ const TASK_HEADERS: string[] = ['ID', 'Status', 'Vault Name', 'Owner', 'Amount',
 const TX_HEADERS: string[] = ['ID', 'Type', 'Vault', 'Amount (XLM)', 'Fee (XLM)', 'Status', 'Timestamp', 'Hash', 'Block', 'From', 'To', 'Memo'];
 
 function escapeCell(value: string): string {
+  if (value.length > 0 && /^[=+\-@\t\r]/.test(value)) {
+    value = `'${value}`;
+  }
   if (value.includes('"') || value.includes(',') || value.includes('\n') || value.includes('\r')) {
     return `"${value.replace(/"/g, '""')}"`;
   }

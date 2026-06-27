@@ -133,6 +133,57 @@ describe('toCsv', () => {
     expect(result).toContain('"Alpha, Vault"');
     expect(result).toContain('"Initial, deposit"');
   });
+
+  describe('CSV injection mitigation', () => {
+    it('escapes cells starting with =', () => {
+      const task = baseTask({ vaultName: '=cmd' });
+      const result = toCsv([task]);
+      expect(result).toContain("v-001,approved,'=cmd,");
+    });
+
+    it('escapes cells starting with +', () => {
+      const task = baseTask({ vaultName: '+1-1' });
+      const result = toCsv([task]);
+      expect(result).toContain("v-001,approved,'+1-1,");
+    });
+
+    it('escapes cells starting with -', () => {
+      const task = baseTask({ vaultName: '-1+1' });
+      const result = toCsv([task]);
+      expect(result).toContain("v-001,approved,'-1+1,");
+    });
+
+    it('escapes cells starting with @', () => {
+      const task = baseTask({ vaultName: '@SUM' });
+      const result = toCsv([task]);
+      expect(result).toContain("v-001,approved,'@SUM,");
+    });
+
+    it('escapes cells starting with tab', () => {
+      const task = baseTask({ vaultName: '\tcmd' });
+      const result = toCsv([task]);
+      expect(result).toContain("v-001,approved,'\tcmd,");
+    });
+
+    it('escapes cells starting with CR', () => {
+      const task = baseTask({ vaultName: '\rcmd' });
+      const result = toCsv([task]);
+      // Should prepend ' and since it has a CR, also escape and quote it
+      expect(result).toContain('v-001,approved,"\'\rcmd",');
+    });
+
+    it('does not escape benign positive numbers', () => {
+      const task = baseTask({ vaultName: '123' });
+      const result = toCsv([task]);
+      expect(result).toContain('v-001,approved,123,');
+    });
+
+    it('does not escape empty cells or cells starting with normal characters', () => {
+      const task = baseTask({ vaultName: 'Alpha Vault', notes: '' });
+      const result = toCsv([task]);
+      expect(result).toContain('v-001,approved,Alpha Vault,GOWNER...ALPHA,"1,000 USDC",2026-01-01,Launch,');
+    });
+  });
 });
 
 describe('downloadCsv', () => {
